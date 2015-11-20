@@ -24,6 +24,7 @@ tools/app/public/style.css
 .build
 .cstmz-tmp
 dist/css
+dist/css2
 dist/js
 dist/fonts
 dist/sass

@@ -22,7 +22,8 @@
   "scripts": {
     "start": "nodemon tools/app/app.js",
     "build": "gulp install && gulp",
-    "preview": "gulp preview"
+    "preview": "gulp preview",
+    "stylus": "gulp dev-stylus"
   },
   "style": "dist/css/amazeui.css",
   "less": "less/amazeui.less",
@@ -62,6 +63,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.3",
     "gulp-size": "^1.2.1",
+    "gulp-stylus": "^2.1.0",
     "gulp-uglify": "latest",
     "gulp-util": "^3.0.4",
     "gulp-webpack": "^1.5.0",

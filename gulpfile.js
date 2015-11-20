@@ -33,6 +33,10 @@ var config = {
       './less/amazeui.less',
       './less/themes/flat/amazeui.flat.less'
     ],
+    stylus: [
+      './stylus/amazeui.styl',
+      './stylus/themes/dashboard.styl'
+    ],
     fonts: './fonts/*',
     widgets: [
       '*/src/*.js',
@@ -46,7 +50,8 @@ var config = {
   dist: {
     js: './dist/js',
     css: './dist/css',
-    fonts: './dist/fonts'
+    fonts: './dist/fonts',
+    css2: './dist/css2'
   },
   js: {
     base: [
@@ -457,3 +462,42 @@ gulp.task('preview', ['build', 'watch', 'appServer']);
 require('./tools/tasks/');
 
 gulp.task('customize', ['customizer']);
+
+gulp.task('build-stylus', function() {
+  gulp.src(config.path.stylus)
+    .pipe($.header(banner, {pkg: pkg, ver: ''}))
+    .pipe($.plumber({errorHandler: function (err) {
+      // 处理编译less错误提示  防止错误之后gulp任务直接中断
+      // $.notify.onError({
+      //           title:    "编译错误",
+      //           message:  "错误信息: <%= error.message %>",
+      //           sound:    "Bottle"
+      //       })(err);
+      console.log(err);
+      this.emit('end');
+    }}))
+    .pipe($.stylus())
+    .pipe($.rename(function(path) {
+      if (path.basename === 'amui') {
+        path.basename = pkg.name + '.basic';
+      }
+    }))
+    .pipe($.autoprefixer({browsers: config.AUTOPREFIXER_BROWSERS}))
+    .pipe($.replace('//dn-amui.qbox.me/font-awesome/4.3.0/', '../'))
+    .pipe(gulp.dest(config.dist.css2))
+    .pipe($.size({showFiles: true, title: 'source'}))
+    // Disable advanced optimizations - selector & property merging, etc.
+    // for Issue #19 https://github.com/allmobilize/amazeui/issues/19
+    .pipe($.minifyCss({noAdvanced: true}))
+    .pipe($.rename({
+      suffix: '.min',
+      extname: '.css'
+    }))
+    .pipe(gulp.dest(config.dist.css2))
+    .pipe($.size({showFiles: true, title: 'minified'}))
+    .pipe($.size({showFiles: true, gzip: true, title: 'gzipped'}));
+});
+
+gulp.task('dev-stylus', ['build-stylus'], function() {
+  gulp.watch(['stylus/**/*.styl'], ['build-stylus']);
+});
