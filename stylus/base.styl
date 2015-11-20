@@ -754,7 +754,7 @@ iframe
   * Exclude `radio` and `checkbox` elements because the default `baseline` value aligns better with text
   */
 button,
-inputnot([type="radio"])not([type="checkbox"]),
+input:not([type="radio"]):not([type="checkbox"]),
 select
   vertical-align middle
 
@@ -775,7 +775,7 @@ select
 
 
 // Scrollbar measure help class
-nsscrollbar-measure()
+{ns}scrollbar-measure()
   width 100px
   height 100px
   overflow scroll
